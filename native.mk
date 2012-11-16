@@ -33,7 +33,11 @@ DBGFLAGS ?= -g -ftrapv # -fmudflap -pg
 
 # Build position-independent executables; fortify with array checks;
 # protect stack against smashing (intentional or accidental)
+ifeq (x86_64,$(shell uname -m))
+SECFLAGS ?= -fPIC -D_FORTIFY_SOURCE=2 -fstack-protector-all
+else
 SECFLAGS ?= -fPIE -D_FORTIFY_SOURCE=2 -fstack-protector-all
+endif
 
 # Dependency generation, commented out due to massive headache
 DEPFLAGS ?= # -MMD
@@ -52,7 +56,7 @@ LDDBGFLAGS ?= -g # -lmudflap
 LDSECFLAGS ?= -pie -Wl,-z,relro -Wl,-z,now
 # Generate position-independent code in a shared library (relocations
 # performed when the library is loaded)
-LDLIB ?= -fPIC
+LDLIBFLAGS ?= -fPIC
 ARFLAGS ?= rcs
 
 SHAREDNAME ?= $(LIBNAME:%=%.so)
