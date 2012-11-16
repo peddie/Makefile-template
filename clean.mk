@@ -16,7 +16,7 @@ clean:
 # Clean up unit tests
 	$(Q)rm -f $(TESTS) $(TESTS_OBJ) $(TESTS_ASM)
 # Clean up AVR stuff
-	$(Q)rm -f $(AVR_HEX) $(AVR_PROJ) $(AVR_EEPROM) $(AVR_EXT_LISTING)
+	$(Q)rm -f $(AVR_HEX) $(AVRPROJ) $(AVR_EEPROM) $(AVR_EXT_LISTING)
 # Clean up dependency files
 	$(Q)find . -name "*.d" | xargs rm -f
 # Clean up counter files for coverage information
