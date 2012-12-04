@@ -6,7 +6,7 @@ AVR_MCU ?= atxmega128a1
 AVR_MCU_SHORT ?= x128a1
 
 # Some useful flags for microcontroller development
-AVR_BOTHFLAGS ?= -fshort-enums -funsigned-char -funsigned-bitfields -DF_CPU=32000000UL -mmcu=$(AVR_MCU) -Os 
+AVR_BOTHFLAGS ?= -fshort-enums -funsigned-char -funsigned-bitfields -DF_CPU=32000000UL -mmcu=$(AVR_MCU) -O0
 AVR_CFLAGS ?= -std=gnu99
 AVR_CXXFLAGS ?= -fno-exceptions -std=gnu++11
 
@@ -58,7 +58,7 @@ flash-eeprom: $(AVR_EEPROM)
 	@echo FLASH-EEPROM $(notdir $<) (AVRISP mkII)
 	$(Q)avrdude -p$(AVR_MCU_SHORT) -cavrisp2 -Pusb -Ueeprom:w:$<:a
 
-LDOPTFLAGS ?= -Wl,--gc-sections -Os
+LDOPTFLAGS ?= -Wl,--gc-sections -O0
 
 USERFLAGS += $(AVR_BOTHFLAGS)
 USERCFLAGS += $(AVR_CFLAGS)
