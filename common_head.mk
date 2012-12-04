@@ -35,5 +35,5 @@ ASM_SHORT = $(notdir $(ASM))
 OBJ_SHORT = $(notdir $(OBJ))
 
 # Generate sweet mixed assembly/C listing files
-ASMFLAGS ?= -fverbose-asm -Wa,-L,-alhsn=
+ASMFLAGS ?= -fverbose-asm -Wa,-L,-alchsdn=
 
