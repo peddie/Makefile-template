@@ -58,7 +58,7 @@ flash-eeprom: $(AVR_EEPROM)
 	@echo FLASH-EEPROM $(notdir $<) (AVRISP mkII)
 	$(Q)avrdude -p$(AVR_MCU_SHORT) -cavrisp2 -Pusb -Ueeprom:w:$<:a
 
-LDOPTFLAGS ?= -Wl,--gc-sections -O0
+LDOPTFLAGS ?= -Wl,--gc-sections -O0 -Wl,-Map=$(PROJ).map,--cref
 
 USERFLAGS += $(AVR_BOTHFLAGS)
 USERCFLAGS += $(AVR_CFLAGS)
