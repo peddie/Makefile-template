@@ -34,7 +34,7 @@ $(AVR_HEX): $(AVRPROJ)
 
 $(AVR_EEPROM): $(AVRPROJ)
 	@echo OBJCOPY $(notdir $<)
-	$(Q)avr-objcopy -R .eeprom -O ihex $(AVRPROJ) $(AVR_EEPROM)
+	$(Q)avr-objcopy -j .eeprom --change-section-lma .eeprom=0 -O ihex $(AVRPROJ) $(AVR_EEPROM)
 
 avr-sizedummy: $(AVRPROJ)
 	@echo AVR-SIZE $(notdir $<)
@@ -51,11 +51,11 @@ avr-eep: $(AVR_EEPROM)
 # The default here is to use the AVRISP mkII.  Be sure to change the
 # settings for other programmers.
 flash: $(AVR_HEX)
-	@echo FLASH $(notdir $<) (AVRISP mkII)
+	@echo FLASH $(notdir $<) \(AVRISP mkII\)
 	$(Q)avrdude -p$(AVR_MCU_SHORT) -cavrisp2 -Pusb -Uflash:w:$<:a
 
 flash-eeprom: $(AVR_EEPROM)
-	@echo FLASH-EEPROM $(notdir $<) (AVRISP mkII)
+	@echo FLASH-EEPROM $(notdir $<) \(AVRISP mkII\)
 	$(Q)avrdude -p$(AVR_MCU_SHORT) -cavrisp2 -Pusb -Ueeprom:w:$<:a
 
 LDOPTFLAGS ?= -Wl,--gc-sections -O0 -Wl,-Map=$(PROJ).map,--cref
