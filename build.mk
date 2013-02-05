@@ -63,6 +63,15 @@ else
 	$(Q)$(CC) $^ $(LDFLAGS) -o $@
 endif
 
+.SECONDEXPANSION:
+$(CM4_PROJ): %.elf : $$(findstring $$(*:%=%.o),$(OBJ)) $(filter-out $(PROJ:%=%.o),$(OBJ))
+	@echo LD $@
+ifneq (,$(CXX_SRC))
+	$(Q)$(CXX) $^ $(LDFLAGS) -o $@
+else
+	$(Q)$(CC) $^ $(LDFLAGS) -o $@
+endif
+
 # Generate object files; output assembly listings alongside.  
 $(C_OBJ) : %.o : %.c # $(C_HDR)
 	@echo CC $(notdir $<)

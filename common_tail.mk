@@ -42,6 +42,16 @@ help:
 	@echo
 	@echo '    make flash-eeprom -- Upload an AVR EEPROM image via an ISP'
 	@echo
+ifdef CM4_PROJ
+	@echo '    make cm4-all      -- Build code for ARM Cortex-M4 chips    '
+	@echo
+	@echo '    make flash        -- program a Cortex-M4 via an ISP        '
+	@echo
+endif
+ifdef CM4_EEPROM
+	@echo '    make flash-eeprom -- Upload an EEPROM image via an ISP     '
+	@echo
+endif
 
 # Print debug information about any variable
 debug-%:
