@@ -73,7 +73,7 @@ cm4-all: $(CM4_PROJ:%.elf=%.images)
 	@printf "\n"
 	$(Q)$(CM4_PREFIX)-size $<
 
-CM4_IMAGES ?= $(CM4_PROJ:%.elf=%.hex) $(CM4_PROJ:%.elf=%.srec) $(CM4_PROJ:%.elf=%.bin)
+CM4_IMAGES ?= $(CM4_PROJ:%.elf=%.hex) $(CM4_PROJ:%.elf=%.srec) $(CM4_PROJ:%.elf=%.bin) $(CM4_PROJ)
 CM4_EXT_LISTING ?= $(CM4_PROJ:%.elf=%.list) $(CM4_PROJ:%.elf=%.map)
 
 .PHONY: $(CM4_PROJ:%.elf=%.images) size cm4-all
