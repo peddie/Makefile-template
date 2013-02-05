@@ -2,9 +2,7 @@
 
 CXX_EXT ?= cc
 
-# TODO: make it so that you can change something up top and it'll put
-# all the linter problems into your flymake buffer too
-check-syntax: check-syntax-c check-syntax-cc
+check-syntax: check-syntax-c check-syntax-cc $(EXTRA_CHECKS)
 
 ifdef CHK_SOURCES
 C_CHK_SOURCES = $(filter %.c,$(CHK_SOURCES))
