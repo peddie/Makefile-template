@@ -52,6 +52,15 @@ ifdef CM4_EEPROM
 	@echo '    make flash-eeprom -- Upload an EEPROM image via an ISP     '
 	@echo
 endif
+ifdef DOC_DIR
+ifneq "$(wildcard $(DOC_DIR) )" ""
+	@echo '    make doc(s)       -- Build documentation for the project   '
+	@echo '                         using the default Doxygen target.     '
+	@echo
+	@echo '    make doc(s)-clean -- clean up the project documentation.   '
+	@echo
+endif
+endif
 
 # Print debug information about any variable
 debug-%:

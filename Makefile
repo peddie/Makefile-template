@@ -52,4 +52,5 @@ include $(MKFILE_DIR)build.mk
 include $(MKFILE_DIR)test.mk
 include $(MKFILE_DIR)syntax.mk
 include $(MKFILE_DIR)clean.mk
+include $(MKFILE_DIR)docs.mk
 include $(MKFILE_DIR)common_tail.mk
