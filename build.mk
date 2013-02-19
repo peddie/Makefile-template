@@ -75,7 +75,11 @@ endif
 # Generate object files; output assembly listings alongside.  
 $(C_OBJ) : %.o : %.c # $(C_HDR)
 	@echo CC $(notdir $<)
+ifeq ("$(UNAME_OS)","Darwin")
+	$(Q)$(CC) $(CFLAGS) -c $< -o $@
+else
 	$(Q)$(CC) $(CFLAGS) $(ASMFLAGS)$(^:%.c=%.$(ASMNAME)) -c $< -o $@
+endif
 
 $(CXX_OBJ) : %.o : %.$(CXX_EXT) # $(CXX_HDR)
 	@echo CXX $(notdir $<)
