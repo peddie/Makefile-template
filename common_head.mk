@@ -3,6 +3,9 @@ Q ?= @
 all: $(PROJ)
 .PHONY: all
 
+# Detect the native OS
+UNAME_OS=$(shell uname -s)
+
 # What's the extension on C++ files?  .cc is the Google default, but
 # lots of people use .cpp instead.
 CXX_EXT ?= cc
