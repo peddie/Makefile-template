@@ -43,7 +43,11 @@ endif
 DEPFLAGS ?= # -MMD
 
 # Run the link-time optimizer; rearrange some stuff to save code size
+ifeq ("$(UNAME_OS)","Darwin")
+LDOPTFLAGS ?= -flto
+else
 LDOPTFLAGS ?= -flto -Wl,--gc-sections
+endif
 LDWARNFLAGS ?=
 # Include debug symbols; use the mudflaps library for runtime checks
 LDDBGFLAGS ?= -g # -lmudflap 
@@ -53,7 +57,11 @@ LDDBGFLAGS ?= -g # -lmudflap
 # load of program and (in combination with relro) mark PLT read-only
 #
 # TODO: -pie fails on x86_64 sometimes.  Why?
+ifeq ("$(UNAME_OS)","Darwin")
+LDSECFLAGS ?= -pie
+else
 LDSECFLAGS ?= -pie -Wl,-z,relro -Wl,-z,now
+endif
 # Generate position-independent code in a shared library (relocations
 # performed when the library is loaded)
 LDLIBFLAGS ?= -fPIC
