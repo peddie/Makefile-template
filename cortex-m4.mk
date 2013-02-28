@@ -13,6 +13,7 @@ CM4_AR = $(CM4_PREFIX)-ar
 CM4_DB = $(CM4_PREFIX)-gdb
 CM4_OBJCOPY = $(CM4_PREFIX)-objcopy
 CM4_OBJDUMP = $(CM4_PREFIX)-objdump
+CM4_SIZE = $(CM4_PREFIX)-size
 
 # the -mcpu flag is commented out because it seems to break linkage
 # using the gcc-arm-embedded toolchain when using the hardware
@@ -36,6 +37,7 @@ AR = $(CM4_AR)
 DB = $(CM4_DB)
 OBJCOPY = $(CM4_OBJCOPY)
 OBJDUMP = $(CM4_OBJDUMP)
+SIZE = $(CM4_SIZE)
 
 flash: $(CM4_PROJ)
 	@echo FLASH $(notdir $<) \(BMP\)
@@ -71,7 +73,7 @@ cm4-all: $(CM4_PROJ:%.elf=%.images)
 	@printf "  =======================\n"
 	@printf "  Section sizes in bytes:\n"
 	@printf "\n"
-	$(Q)$(CM4_PREFIX)-size $<
+	$(Q)$(SIZE) -A -x $<
 
 CM4_IMAGES ?= $(CM4_PROJ:%.elf=%.hex) $(CM4_PROJ:%.elf=%.srec) $(CM4_PROJ:%.elf=%.bin) $(CM4_PROJ)
 CM4_EXT_LISTING ?= $(CM4_PROJ:%.elf=%.list) $(CM4_PROJ:%.elf=%.map)
