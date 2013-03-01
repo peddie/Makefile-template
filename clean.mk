@@ -15,6 +15,9 @@ ifdef LIBNAME
 # Clean up static library
 	$(Q)rm -f $(LIBNAME).a
 endif
+ifdef USERCLEAN
+	$(Q)rm -fr $(USERCLEAN)
+endif
 ifdef TESTS_SRC
 # Clean up unit tests
 	$(Q)rm -f $(TESTS) $(TESTS_OBJ) $(TESTS_ASM)
