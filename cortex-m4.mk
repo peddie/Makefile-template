@@ -45,6 +45,7 @@ flash: $(CM4_PROJ)
                       -ex 'target extended-remote $(BMP_PORT)' \
                       -ex 'monitor swdp_scan' \
                       -ex 'attach 1' \
+                      -ex 'monitor erase_mass' \
                       -ex 'load' \
                       $(CM4_PROJ)
 
