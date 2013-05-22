@@ -102,12 +102,12 @@ else
 	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) $(ASMFLAGS)$(^:%.$(CXX_EXT)=%.$(ASMNAME)) -c $< -o $@
 endif
 
-$(filter-out $(CUSTOM_C_OBJ), $(C_OBJ)) : %.o : %.$(CXX_EXT) # $(C_HDR)
-	@echo CC $(notdir $<)
+$(filter-out $(CUSTOM_CXX_OBJ), $(CXX_OBJ)) : %.o : %.$(CXX_EXT) # $(CXX_HDR)
+	@echo CXX $(notdir $<)
 ifeq ("$(UNAME_OS)","Darwin")
-	$(Q)$(CC) $(CFLAGS) -c $< -o $@
+	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 else
-	$(Q)$(CC) $(CFLAGS) $(ASMFLAGS)$(^:%.$(CXX_EXT)=%.$(ASMNAME)) -c $< -o $@
+	$(Q)$(CXX) $(CXXFLAGS) $(ASMFLAGS)$(^:%.$(CXX_EXT)=%.$(ASMNAME)) -c $< -o $@
 endif
 
 $(OBJ) : $(HDR)
