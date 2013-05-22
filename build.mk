@@ -28,8 +28,8 @@ DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 -pedantic  \
     -Wvolatile-register-var  -Wwrite-strings
 
 ifndef NO_WERROR
-WARNFLAGS = $(DEFAULT_WARNFLAGS) -Werror -pedantic-errors
-CXXWARNFLAGS = $(DEFAULT_CXXWARNFLAGS) -Werror -pedantic-errors
+WARNFLAGS = $(DEFAULT_WARNFLAGS) -Werror
+CXXWARNFLAGS = $(DEFAULT_CXXWARNFLAGS) -Werror
 else
 WARNFLAGS = $(DEFAULT_WARNFLAGS)
 CXXWARNFLAGS = $(DEFAULT_CXXWARNFLAGS)
