@@ -20,7 +20,11 @@ AR ?= ar
 # I'm told that -march=native sometimes misses stuff, so if you really
 # need speed, you might either look at the assembly or add
 # -msse{4.1,4.2}, -mavx or whatever is appropriate for your chip.
+ifdef PORTABLE_BINARIES
+OPTFLAGS ?= -Os
+else
 OPTFLAGS ?= -Os -march=native -ftree-vectorize -flto
+endif
 
 # Include debug symbols; trap on signed integer overflows; install
 # mudflaps for runtime checks on arrays (including malloced ones);
