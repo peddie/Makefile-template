@@ -1,5 +1,5 @@
 # We prefer C99 with GNU extensions
-WARNFLAGS ?= -Wall -Wextra -std=gnu99 -Wimplicit \
+DEFAULT_WARNFLAGS ?= -Wall -Wextra -std=gnu99 -Wimplicit \
              -Wshadow -Wswitch-default -Wswitch-enum -Wundef \
              -Wuninitialized -Wpointer-arith -Wstrict-prototypes \
              -Wmissing-prototypes -Wcast-align -Wformat=2 \
@@ -8,7 +8,7 @@ WARNFLAGS ?= -Wall -Wextra -std=gnu99 -Wimplicit \
 
 # And for C++:
 # http://stackoverflow.com/questions/399850/best-compiler-warning-level-for-c-c-compilers
-CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 -pedantic  \
+DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 -pedantic  \
     -Wextra  -Waggregate-return -Wcast-align \
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion \
     -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 \
@@ -28,8 +28,11 @@ CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 -pedantic  \
     -Wvolatile-register-var  -Wwrite-strings
 
 ifndef NO_WERROR
-WARNFLAGS += -Werror -pedantic-errors
-CXXWARNFLAGS += -Werror -pedantic-errors
+WARNFLAGS = $(DEFAULT_WARNFLAGS) -Werror -pedantic-errors
+CXXWARNFLAGS = $(DEFAULT_CXXWARNFLAGS) -Werror -pedantic-errors
+else
+WARNFLAGS = $(DEFAULT_WARNFLAGS)
+CXXWARNFLAGS = $(DEFAULT_CXXWARNFLAGS)
 endif
 
 INCLUDES = $(INCLUDENAMES:%=-I%) $(OTHERINCLUDE)
@@ -72,8 +75,18 @@ else
 	$(Q)$(CC) $^ $(LDFLAGS) -o $@
 endif
 
-# Generate object files; output assembly listings alongside.  
-$(C_OBJ) : %.o : %.c # $(C_HDR)
+# Generate object files; output assembly listings alongside.  esden
+# tells me that it's hard to get a real GCC on OS X, so avoid the
+# worst of the non-portability.
+$(CUSTOM_C_OBJ) : %.o : %.c
+	@echo CC \(CUSTOM\) $(notdir $<)
+ifeq ("$(UNAME_OS)","Darwin")
+	$(Q)$(CC) $(CUSTOM_CFLAGS) -c $< -o $@
+else
+	$(Q)$(CC) $(CUSTOM_CFLAGS) $(ASMFLAGS)$(^:%.c=%.$(ASMNAME)) -c $< -o $@
+endif
+
+$(filter-out $(CUSTOM_C_OBJ), $(C_OBJ)) : %.o : %.c # $(C_HDR)
 	@echo CC $(notdir $<)
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
@@ -81,10 +94,20 @@ else
 	$(Q)$(CC) $(CFLAGS) $(ASMFLAGS)$(^:%.c=%.$(ASMNAME)) -c $< -o $@
 endif
 
-$(CXX_OBJ) : %.o : %.$(CXX_EXT) # $(CXX_HDR)
-	@echo CXX $(notdir $<)
-	@echo at $(@) plus $(+) star $(*)
-	$(Q)$(CXX) $(CXXFLAGS) $(ASMFLAGS)$(^:%.$(CXX_EXT)=%.$(ASMNAME)) -c $< -o $@
+$(CUSTOM_CXX_OBJ) : %.o : %.$(CXX_EXT)
+	@echo CXX \(CUSTOM\) $(notdir $<)
+ifeq ("$(UNAME_OS)","Darwin")
+	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) -c $< -o $@
+else
+	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) $(ASMFLAGS)$(^:%.$(CXX_EXT)=%.$(ASMNAME)) -c $< -o $@
+endif
+
+$(filter-out $(CUSTOM_C_OBJ), $(C_OBJ)) : %.o : %.$(CXX_EXT) # $(C_HDR)
+	@echo CC $(notdir $<)
+ifeq ("$(UNAME_OS)","Darwin")
+	$(Q)$(CC) $(CFLAGS) -c $< -o $@
+else
+	$(Q)$(CC) $(CFLAGS) $(ASMFLAGS)$(^:%.$(CXX_EXT)=%.$(ASMNAME)) -c $< -o $@
+endif
 
 $(OBJ) : $(HDR)
-

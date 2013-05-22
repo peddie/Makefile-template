@@ -13,6 +13,9 @@ CXX_EXT ?= cc
 C_SRC = $(filter %.c,$(SRC))
 CXX_SRC = $(filter %.$(CXX_EXT),$(SRC))
 
+CUSTOM_C_SRC = $(filter %.c,$(CUSTOM_SRC))
+CUSTOM_CXX_SRC = $(filter %.$(CXX_EXT),$(CUSTOM_SRC))
+
 C_HDR = $(filter %.h,$(SRC))
 CXX_HDR = $(filter %.hh,$(SRC))
 
@@ -21,10 +24,12 @@ ASMNAME ?= lst
 # Default setting for object files is just .c -> .o
 C_ASM ?= $(C_SRC:%.c=%.$(ASMNAME))
 C_OBJ ?= $(C_SRC:%.c=%.o)
+CUSTOM_C_OBJ ?= $(CUSTOM_C_SRC:%.c=%.o)
 C_DEPS ?= $(C_SRC:%.c=%.d)
 
 CXX_ASM ?= $(CXX_SRC:%.$(CXX_EXT)=%.$(ASMNAME))
 CXX_OBJ ?= $(CXX_SRC:%.$(CXX_EXT)=%.o)
+CUSTOM_CXX_OBJ ?= $(CUSTOM_CXX_SRC:%.c=%.o)
 CXX_DEPS ?= $(CXX_SRC:%.$(CXX_EXT)=%.d)
 
 ASM ?= $(C_ASM) $(CXX_ASM)
