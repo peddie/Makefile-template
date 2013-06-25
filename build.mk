@@ -8,7 +8,7 @@ DEFAULT_WARNFLAGS ?= -Wall -Wextra -std=gnu99 -Wimplicit \
 
 # And for C++:
 # http://stackoverflow.com/questions/399850/best-compiler-warning-level-for-c-c-compilers
-DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 -pedantic  \
+DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 \
     -Wextra  -Waggregate-return -Wcast-align \
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion \
     -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 \
