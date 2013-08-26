@@ -1,6 +1,6 @@
 CM4_PROJ ?= $(PROJ:%=%.elf)
 
-HARD_FLOAT_FLAGS ?= -mfloat-abi=hard 
+HARD_FLOAT_FLAGS ?= -mfloat-abi=hard
 
 LDSCRIPT ?= $(PROJ).ld
 BMP_PORT ?= /dev/ttyACM0
@@ -19,7 +19,7 @@ CM4_SIZE = $(CM4_PREFIX)-size
 # using the gcc-arm-embedded toolchain when using the hardware
 # floating point ABI.
 CM4_BOTHFLAGS ?= -DSTM32F4 -mfpu=fpv4-sp-d16 -mthumb -mcpu=cortex-m4
-CM4_CFLAGS ?= 
+CM4_CFLAGS ?=
 CM4_CXXFLAGS ?= -fno-exceptions
 
 CM4_LDFLAGS ?= --static -lc -lnosys -nostartfiles -T$(LDSCRIPT)
@@ -48,6 +48,16 @@ flash: $(CM4_PROJ)
                       -ex 'monitor erase_mass' \
                       -ex 'load' \
                       $(CM4_PROJ)
+
+run: $(CM4_PROJ)
+	@echo FLASH $(notdir $<) \(BMP\)
+	$(Q)$(CM4_DB) --batch \
+		-ex 'target extended-remote $(BMP_PORT)' \
+		-ex 'monitor swdp_scan' \
+		-ex 'attach 1' \
+		-ex 'load' \
+		$(CM4_PROJ) \
+		-ex 'run'
 
 $(CM4_PROJ:%.elf=%.images) : %.images: %.bin %.hex %.srec %.list %.elf
 
