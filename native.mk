@@ -38,9 +38,9 @@ DBGFLAGS ?= -g -ftrapv # -fmudflap -pg
 # Build position-independent executables; fortify with array checks;
 # protect stack against smashing (intentional or accidental)
 ifeq (x86_64,$(shell uname -m))
-SECFLAGS ?= -fPIC -D_FORTIFY_SOURCE=2 -fstack-protector-all
+SECFLAGS ?= -fPIC -D_FORTIFY_SOURCE=2 -fstack-protector-all -fno-strict-overflow
 else
-SECFLAGS ?= -fPIE -D_FORTIFY_SOURCE=2 -fstack-protector-all
+SECFLAGS ?= -fPIE -D_FORTIFY_SOURCE=2 -fstack-protector-all -fno-strict-overflow
 endif
 
 # Dependency generation, commented out due to massive headache
