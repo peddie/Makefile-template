@@ -46,12 +46,25 @@ endif
 # Dependency generation, commented out due to massive headache
 DEPFLAGS ?= # -MMD
 
-# Run the link-time optimizer; rearrange some stuff to save code size
 ifeq ("$(UNAME_OS)","Darwin")
-LDOPTFLAGS ?= -flto
+
+ifdef PORTABLE_BINARIES
+LDOPTFLAGS ?=
 else
+LDOPTFLAGS ?= -flto
+endif
+
+else
+
+ifdef PORTABLE_BINARIES
+LDOPTFLAGS ?=
+else
+# Run the link-time optimizer; rearrange some stuff to save code size
 LDOPTFLAGS ?= -flto -Wl,--gc-sections
 endif
+
+endif
+
 LDWARNFLAGS ?=
 # Include debug symbols; use the mudflaps library for runtime checks
 LDDBGFLAGS ?= -g # -lmudflap 
@@ -89,4 +102,3 @@ $(STATICNAME) : lib%.a : %.o $(filter-out $(LIBNAME:lib%=%.o),$(OBJ))
 .PHONY: shared static
 shared: $(SHAREDNAME)
 static: $(STATICNAME)
-
