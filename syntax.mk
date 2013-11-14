@@ -32,7 +32,7 @@ ifneq (,$(findstring .$(CXX_EXT),$(CXX_TESTS_SRC)))
 	$(Q)$(CXX) -fsyntax-only $(WARNFLAGS) $(INCLUDES) $(CXX_TESTS_SRC)
 endif
 
-.PHONY: lint lint-c lint-cc
+.PHONY: lint lint-c lint-cc sparse
 lint: lint-c lint-cc
 
 # Where does the compiler search for #includes?

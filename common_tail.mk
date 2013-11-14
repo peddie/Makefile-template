@@ -43,6 +43,11 @@ endif
 	@echo '    make lint         -- Run external linters (splint, cpplint.py,'
 	@echo '                         cppcheck) to find code problems      '
 	@echo
+ifneq (,$(C_SRC))
+	@echo '    make sparse       -- Run the "sparse" (cgcc) wrapper to   '
+	@echo '                         help find code problems              '
+	@echo
+endif
 ifdef AVRPROJ
 	@echo '    make avr-all      -- Build code for ATmega AVR chips      '
 	@echo
