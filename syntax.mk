@@ -32,7 +32,7 @@ ifneq (,$(findstring .$(CXX_EXT),$(CXX_TESTS_SRC)))
 	$(Q)$(CXX) -fsyntax-only $(WARNFLAGS) $(INCLUDES) $(CXX_TESTS_SRC)
 endif
 
-.PHONY: lint lint-c lint-cc sparse
+.PHONY: lint lint-c lint-cc
 lint: lint-c lint-cc
 
 # Where does the compiler search for #includes?
@@ -47,11 +47,13 @@ CC_INCLUDES ?= $(foreach include,$(CC_INCLUDE_DIRS),-I$(include))
 # Google's C++ linter (not too bad for C either)
 GOOGLE_CPPLINT ?= $(shell if [ `which cpplint.py` ]; then echo cpplint.py; elif [ `which cpplint` ]; then echo cpplint; fi;)
 
-# cppcheck -- warning, this can be quite slow!
+# cppcheck -- warning, this can be quite slow, so we don't include it
+# by default!
 CPPCHECK ?= $(shell if [ `which cppcheck` ]; then echo cppcheck; fi;)
 CPPCHECK_FLAGS ?= --enable=all --std=c++11 --force
 
-# The venerable splint.
+# The venerable splint.  It's infuriating and fragile, so we don't
+# include it by default
 SPLINT ?= $(shell if [ `which splint` ]; then echo splint; fi;)
 SPLINT_FLAGS ?= +posixlib -warnposix
 
@@ -59,50 +61,66 @@ SPLINT_FLAGS ?= +posixlib -warnposix
 SPARSE ?= $(shell if [ `which cgcc` ]; then echo cgcc; fi;)
 SPARSE_FLAGS ?= -Wsparse-all -Wno-declaration-after-statement -fsyntax-only
 
+# Overload these to specify more built-in tests.
+C_LINT_TARGETS ?= cpplint-c sparse
+CXX_LINT_TARGETS ?= cpplint-cc
+
+# Allow the user to tack on additional targets.
+.PHONY: $(C_LINT_TARGETS) $(CXX_LINT_TARGETS) $(USER_C_LINT_TARGETS)
 # Final configuration
-CXX_LINT ?= $(CPPCHECK) $(GOOGLE_CPPLINT)
-C_LINT ?= $(SPLINT)
+lint-c: $(C_LINT_TARGETS) $(USER_C_LINT_TARGETS)
+lint-cc: $(CXX_LINT_TARGETS) $(USER_CXX_LINT_TARGETS)
 
-lint-c:
+# C linting
 ifneq (,$(findstring .c,$(C_CHK_SOURCES)))
-	@echo LINT $(notdir $(C_CHK_SOURCES))
-	$(Q)$(SHELL) -c 'for linter in $(C_LINT) ;\
-            do \
-              if echo $${linter} | grep -q cpplint ;\
-              then \
-                $${linter} $(C_CHK_SOURCES) 2>&1 | perl -pe "s/^(.*\.c:\d+:)\s+(.*)$$/\1 warning: \2/" ;\
-              elif echo $${linter} | grep -q splint ;\
-              then \
-                $${linter} $(SPLINT_FLAGS) $(CC_INCLUDES) $(C_CHK_SOURCES) ;\
-              else \
-                $${linter} $(INCLUDES) $(C_CHK_SOURCES) ;\
-              fi \
-            done'
+
+cpplint-c:
+ifneq (,$(GOOGLE_CPPLINT))
+	@echo CPPLINT $(notdir $(C_CHK_SOURCES))
+	$(Q)$(GOOGLE_CPPLINT) $(C_CHK_SOURCES) 2>&1 | perl -pe "s/^(.*\.c:\d+:)\s+(.*)$$/\1 warning: \2/"
+else
+	@echo "'cpplint.py' not found on your $$PATH!"
 endif
 
-lint-cc:
-ifneq (,$(findstring .$(CXX_EXT),$(CXX_CHK_SOURCES)))
-	@echo LINT $(notdir $(CXX_CHK_SOURCES))
-	$(Q)$(SHELL) -c 'for linter in $(CXX_LINT) ;\
-            do \
-              if echo $${linter} | grep -q cpplint ;\
-              then \
-                $${linter} $(CXX_CHK_SOURCES) 2>&1 | perl -pe "s/^(.*\.$(CXX_EXT):\d+:)\s+(.*)$$/\1 warning: \2/" ;\
-              elif echo $${linter} | grep -q cppcheck ;\
-              then \
-                $${linter} $(CPPCHECK_FLAGS) $(CXX_INCLUDES) $(INCLUDES) $(CXX_CHK_SOURCES) 2>&1 >/dev/null | perl -pe "s/\[(\S+\.$(CXX_EXT)):(\d+)\]:/\1:\2: warning:/; s/^\(information\).*$$//";\
-              else \
-                $${linter} $(INCLUDES) $(CXX_CHK_SOURCES) ;\
-              fi \
-            done'
+splint:
+ifneq (,$(SPLINT))
+	@echo SPLINT $(notdir $(C_CHK_SOURCES))
+	$(Q)$(SPLINT) $(SPLINT_FLAGS) $(CC_INCLUDES) $(INCLUDES) $(C_CHK_SOURCES)
+else
+	@echo "'splint' not found on your $$PATH!"
 endif
 
+sparse:
+ifneq (,$(SPARSE))
 ifneq (,$(C_OBJ))
 # bit of a hack, this
-sparse:
 	@echo SPARSE \(CGCC\) $(notdir $(C_OBJ))
 	$(Q)$(MAKE) CC='$(SPARSE) $(SPARSE_FLAGS)' $(C_OBJ)
 else
-sparse:
 	@echo "sparse (cgcc) is only for C (not C++) code!"
 endif
+else
+	@echo "'cgcc' not found on your $$PATH!"
+endif
+
+endif  # C_CHK_SOURCES
+
+ifneq (,$(findstring .$(CXX_EXT),$(CXX_CHK_SOURCES)))
+
+cpplint-cc:
+ifneq (,$(GOOGLE_CPPLINT))
+	@echo CPPLINT $(notdir $(CXX_CHK_SOURCES))
+	$(Q)$(GOOGLE_CPPLINT) $(CXX_CHK_SOURCES) 2>&1 | perl -pe "s/^(.*\.$(CXX_EXT):\d+:)\s+(.*)$$/\1 warning: \2/"
+else
+	@echo "'cpplint.py' not found on your $$PATH!"
+endif
+
+cppcheck:
+ifneq (,$(CPPCHECK))
+	@echo CPPCHECK $(notdir $(CXX_CHK_SOURCES))
+	$(Q)$(CPPCHECK) $(CPPCHECK_FLAGS) $(CXX_INCLUDES) $(INCLUDES) $(CXX_CHK_SOURCES) 2>&1 >/dev/null | perl -pe "s/\[(\S+\.$(CXX_EXT)):(\d+)\]:/\1:\2: warning:/; s/^\(information\).*$$//"
+else
+	@echo "'cppcheck' not found on your $$PATH!"
+endif
+
+endif  # CXX_CHK_SOURCES
