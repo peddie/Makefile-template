@@ -79,6 +79,9 @@ ifdef DEPS
 	@echo '    make deps         -- Install build dependencies.           '
 	@echo
 endif
+ifdef USER_HELP
+	@echo $(USER_HELP)
+endif
 
 # Print debug information about any variable
 debug-%:
