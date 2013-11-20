@@ -47,22 +47,10 @@ endif
 DEPFLAGS ?= # -MMD
 
 ifeq ("$(UNAME_OS)","Darwin")
-
-ifdef PORTABLE_BINARIES
-LDOPTFLAGS ?=
+LDOPTFLAGS ?= $(OPTFLAGS)
 else
-LDOPTFLAGS ?= -flto
-endif
-
-else
-
-ifdef PORTABLE_BINARIES
-LDOPTFLAGS ?=
-else
-# Run the link-time optimizer; rearrange some stuff to save code size
-LDOPTFLAGS ?= -flto -Wl,--gc-sections
-endif
-
+# Rearrange some stuff to save code size
+LDOPTFLAGS ?= $(OPTFLAGS) -Wl,--gc-sections
 endif
 
 LDWARNFLAGS ?=
