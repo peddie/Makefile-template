@@ -77,7 +77,7 @@ ifneq (,$(findstring .c,$(C_CHK_SOURCES)))
 cpplint-c:
 ifneq (,$(GOOGLE_CPPLINT))
 	@echo CPPLINT $(notdir $(C_CHK_SOURCES))
-	$(Q)$(GOOGLE_CPPLINT) $(C_CHK_SOURCES) 2>&1 | perl -pe "s/^(.*\.c:\d+:)\s+(.*)$$/\1 warning: \2/"
+	$(Q)$(GOOGLE_CPPLINT) --filter=-readability/casting $(C_CHK_SOURCES) 2>&1 | perl -pe "s/^(.*\.c:\d+:)\s+(.*)$$/\1 warning: \2/"
 else
 	@echo "'cpplint.py' not found on your $$PATH!"
 endif
