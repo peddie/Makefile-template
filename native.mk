@@ -69,7 +69,7 @@ LDSECFLAGS ?= -pie -Wl,-z,relro -Wl,-z,now
 endif
 # Generate position-independent code in a shared library (relocations
 # performed when the library is loaded)
-LDLIBFLAGS ?= -fPIC
+LDLIBFLAGS ?= -fPIC $(LDWARNFLAGS) $(LDDBGFLAGS) $(USERFLAGS) $(USERLDLIBFLAGS) $(LIBS)
 ARFLAGS ?= rcs
 
 SHAREDNAME ?= $(LIBNAME:%=%.so)
