@@ -51,27 +51,27 @@ all: $(PROJ)
 $(PROJ): % : $$(findstring $$(*:%=%.o),$(OBJ)) $(filter-out $(PROJ:%=%.o),$(OBJ))
 	@echo LD $@
 ifneq (,$(CXX_SRC))
-	$(Q)$(CXX) $^ $(LDFLAGS) -o $@
+	$(Q)$(CXX) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
 else
-	$(Q)$(CC) $^ $(LDFLAGS) -o $@
+	$(Q)$(CC) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
 endif
 
 .SECONDEXPANSION:
 $(AVRPROJ): %.elf : $$(findstring $$(*:%=%.o),$(OBJ)) $(filter-out $(PROJ:%=%.o),$(OBJ))
 	@echo LD $@
 ifneq (,$(CXX_SRC))
-	$(Q)$(CXX) $^ $(LDFLAGS) -o $@
+	$(Q)$(CXX) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
 else
-	$(Q)$(CC) $^ $(LDFLAGS) -o $@
+	$(Q)$(CC)  $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
 endif
 
 .SECONDEXPANSION:
 $(CM4_PROJ): %.elf : $$(findstring $$(*:%=%.o),$(OBJ)) $(filter-out $(PROJ:%=%.o),$(OBJ))
 	@echo LD $@
 ifneq (,$(CXX_SRC))
-	$(Q)$(CXX) $^ $(LDFLAGS) -o $@
+	$(Q)$(CXX) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
 else
-	$(Q)$(CC) $^ $(LDFLAGS) -o $@
+	$(Q)$(CC) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
 endif
 
 # Generate object files; output assembly listings alongside.  esden

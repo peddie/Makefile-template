@@ -78,14 +78,14 @@ STATICNAME ?= $(LIBNAME:%=%.a)
 $(SHAREDNAME) : lib%.so : %.o $(filter-out $(LIBNAME:lib%=%.o),$(OBJ))
 	@echo LDLIB $@
 ifneq (,$(CXX_SRC))
-	$(Q)$(CXX) $+ $(LDLIBFLAGS) -shared -Wl,-soname,$(@) -o $(@)
+	$(Q)$(CXX) $(filter %.o %.a %.so, $+) $(LDLIBFLAGS) -shared -Wl,-soname,$(@) -o $(@)
 else
-	$(Q)$(CC) $+ $(LDLIBFLAGS) -shared -Wl,-soname,$(@) -o $(@)
+	$(Q)$(CC) $(filter %.o %.a %.so, $+) $(LDLIBFLAGS) -shared -Wl,-soname,$(@) -o $(@)
 endif
 
 $(STATICNAME) : lib%.a : %.o $(filter-out $(LIBNAME:lib%=%.o),$(OBJ))
 	@echo AR $@
-	$(Q)$(AR) $(ARFLAGS) $(@) $+
+	$(Q)$(AR) $(ARFLAGS) $(@) $(filter %.o %.a %.so, $+)
 
 .PHONY: shared static
 shared: $(SHAREDNAME)
