@@ -82,7 +82,7 @@ $(CUSTOM_C_OBJ) : %.o : %.c
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CC) $(CUSTOM_CFLAGS) -c $< -o $@
 else
-	$(Q)$(CC) $(CUSTOM_CFLAGS) $(ASMFLAGS)$(^:%.c=%.$(ASMNAME)) -c $< -o $@
+	$(Q)$(CC) $(CUSTOM_CFLAGS) $(ASMFLAGS)$(@:%.o=%.$(ASMNAME)) -c $< -o $@
 endif
 
 $(filter-out $(CUSTOM_C_OBJ), $(C_OBJ)) : %.o : %.c # $(C_HDR)
@@ -90,7 +90,7 @@ $(filter-out $(CUSTOM_C_OBJ), $(C_OBJ)) : %.o : %.c # $(C_HDR)
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 else
-	$(Q)$(CC) $(CFLAGS) $(ASMFLAGS)$(^:%.c=%.$(ASMNAME)) -c $< -o $@
+	$(Q)$(CC) $(CFLAGS) $(ASMFLAGS)$(@:%.o=%.$(ASMNAME)) -c $< -o $@
 endif
 
 $(CUSTOM_CXX_OBJ) : %.o : %.$(CXX_EXT)
@@ -98,7 +98,7 @@ $(CUSTOM_CXX_OBJ) : %.o : %.$(CXX_EXT)
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) -c $< -o $@
 else
-	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) $(ASMFLAGS)$(^:%.$(CXX_EXT)=%.$(ASMNAME)) -c $< -o $@
+	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) $(ASMFLAGS)$(@:%.o=%.$(ASMNAME)) -c $< -o $@
 endif
 
 $(filter-out $(CUSTOM_CXX_OBJ), $(CXX_OBJ)) : %.o : %.$(CXX_EXT) # $(CXX_HDR)
@@ -106,7 +106,7 @@ $(filter-out $(CUSTOM_CXX_OBJ), $(CXX_OBJ)) : %.o : %.$(CXX_EXT) # $(CXX_HDR)
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 else
-	$(Q)$(CXX) $(CXXFLAGS) $(ASMFLAGS)$(^:%.$(CXX_EXT)=%.$(ASMNAME)) -c $< -o $@
+	$(Q)$(CXX) $(CXXFLAGS) $(ASMFLAGS)$(@:%.o=%.$(ASMNAME)) -c $< -o $@
 endif
 
 $(OBJ) : $(HDR)
