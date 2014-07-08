@@ -33,7 +33,7 @@ endif
 # 
 # TODO: mixing in mudflaps or profiling should really just be another
 # target.
-DBGFLAGS ?= -g -ftrapv # -fmudflap -pg
+DBGFLAGS ?= -g3 -ftrapv -frecord-gcc-switches # -fmudflap -pg
 
 # Build position-independent executables; fortify with array checks;
 # protect stack against smashing (intentional or accidental)
@@ -55,7 +55,7 @@ endif
 
 LDWARNFLAGS ?=
 # Include debug symbols; use the mudflaps library for runtime checks
-LDDBGFLAGS ?= -g # -lmudflap 
+LDDBGFLAGS ?= -g3 -frecord-gcc-switches # -lmudflap
 
 # Link as a position-independent executable; mark ELF sections
 # read-only where applicable; resolve all dynamic symbols at initial
