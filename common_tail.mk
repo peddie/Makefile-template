@@ -80,7 +80,7 @@ ifdef DEPS
 	@echo
 endif
 ifdef USER_HELP
-	@echo $(USER_HELP)
+	@echo -e $(USER_HELP)
 endif
 
 # Print debug information about any variable
