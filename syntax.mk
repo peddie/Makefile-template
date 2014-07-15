@@ -92,6 +92,7 @@ endif
 
 sparse:
 ifneq (,$(SPARSE))
+ifdef SPARSE
 ifneq (,$(C_OBJ))
 # bit of a hack, this
 	@echo SPARSE \(CGCC\) $(notdir $(C_OBJ))
@@ -101,6 +102,7 @@ else
 endif
 else
 	@echo "'cgcc' not found on your $$PATH!"
+endif
 endif
 
 endif  # C_CHK_SOURCES
