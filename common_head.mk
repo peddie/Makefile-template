@@ -1,3 +1,6 @@
+ifdef VERBOSE
+Q =
+endif
 Q ?= @
 
 all: $(PROJ)

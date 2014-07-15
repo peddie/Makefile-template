@@ -7,7 +7,7 @@ help:
 	@echo
 	@echo '    make              -- build the executable ($(PROJ))       '
 	@echo
-	@echo '    make Q=""         -- print full commands and their output:'
+	@echo '    make VERBOSE=1    -- print full commands and their output:'
 	@echo '                         "gcc -Wall -c foo.c -o foo.o"        '
 	@echo '                         instead of "CC foo.o"                '
 	@echo
