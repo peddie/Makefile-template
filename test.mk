@@ -7,11 +7,11 @@ C_TESTS = $(C_TESTS_SRC:%.c=%)
 CXX_TESTS = $(CXX_TESTS_SRC:%.$(CXX_EXT)=%)
 
 C_TESTS_ASM ?= $(C_TESTS_SRC:%.c=%.$(ASMNAME))
-C_TESTS_OBJ ?= $(C_TESTS_SRC:%.c=%.o)
+C_TESTS_OBJ ?= $(C_TESTS_SRC:%.c=%.$(OBJECT_FILE_SUFFIX))
 C_TESTS_DEPS ?= $(C_TESTS_SRC:%.c=%.d)
 
 CXX_TESTS_ASM ?= $(CXX_TESTS_SRC:%.$(CXX_EXT)=%.$(ASMNAME))
-CXX_TESTS_OBJ ?= $(CXX_TESTS_SRC:%.$(CXX_EXT)=%.o)
+CXX_TESTS_OBJ ?= $(CXX_TESTS_SRC:%.$(CXX_EXT)=%.$(OBJECT_FILE_SUFFIX))
 CXX_TESTS_DEPS ?= $(CXX_TESTS_SRC:%.$(CXX_EXT)=%.d)
 
 TESTS_ASM ?= $(C_TESTS_ASM) $(CXX_TESTS_ASM)
@@ -39,11 +39,11 @@ test : $(TESTS_RUN)
 # now.  It assumes that test program "foo_test.c" contains '#include
 # "foo.c"' in order to be able to test static functions.
 .SECONDEXPANSION:
-$(C_TESTS): %_test : %_test.o $$(filter-out $$(*:%=%.o),$(filter-out $(PROJ:%=%.o),$(C_OBJ)))
+$(C_TESTS): %_test : %_test.$(OBJECT_FILE_SUFFIX) $$(filter-out $$(*:%=%.$(OBJECT_FILE_SUFFIX)),$(filter-out $(PROJ:%=%.$(OBJECT_FILE_SUFFIX)),$(C_OBJ)))
 	@echo LD $@
 	$(Q)$(CC) $+ $(LDFLAGS) $(C_TESTS_LINK:%=-l%) -o $@
 
-$(CXX_TESTS): %_test : %_test.o $$(filter-out $$(*:%=%.o),$(filter-out $(PROJ:%=%.o),$(CXX_OBJ)))
+$(CXX_TESTS): %_test : %_test.$(OBJECT_FILE_SUFFIX) $$(filter-out $$(*:%=%.$(OBJECT_FILE_SUFFIX)),$(filter-out $(PROJ:%=%.$(OBJECT_FILE_SUFFIX)),$(CXX_OBJ)))
 	@echo LD $@
 	$(Q)$(CXX) $+ $(LDFLAGS) $(CXX_TESTS_LINK:%=-l%) -o $@
 
@@ -52,10 +52,10 @@ $(TESTS_RUN): %_test_run: %_test %_test.c %.c $$(filter-out $$(*:%=%.c),$(filter
 	$(Q)./$*_test
 
 # Generate object files; output assembly listings alongside.  
-$(C_TESTS_OBJ) : %.o : %.c 
+$(C_TESTS_OBJ) : %.$(OBJECT_FILE_SUFFIX) : %.c 
 	@echo CC $(notdir $<)
 	$(Q)$(CC) $(CFLAGS) $(C_TESTS_INCLUDE:%=-I%) $(ASMFLAGS)$(^:%.c=%.$(ASMNAME)) -c $< -o $@
 
-$(CXX_TESTS_OBJ) : %.o : %.$(CXX_EXT)
+$(CXX_TESTS_OBJ) : %.$(OBJECT_FILE_SUFFIX) : %.$(CXX_EXT)
 	@echo CXX $(notdir $<)
 	$(Q)$(CXX) $(CXXFLAGS) $(CXX_TESTS_INCLUDE:%=-I%) $(ASMFLAGS)$(^:%.$(CXX_EXT)=%.$(ASMNAME)) -c $< -o $@
