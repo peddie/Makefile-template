@@ -48,65 +48,65 @@ all: $(PROJ)
 
 # Build the project
 .SECONDEXPANSION:
-$(PROJ): % : $$(findstring $$(*:%=%.o),$(OBJ)) $(filter-out $(PROJ:%=%.o),$(OBJ))
+$(PROJ): % : $$(findstring $$(*:%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ)) $(filter-out $(PROJ:%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ))
 	@echo LD $@
 ifneq (,$(CXX_SRC))
-	$(Q)$(CXX) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
+	$(Q)$(CXX) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) -o $@
 else
-	$(Q)$(CC) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
+	$(Q)$(CC) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) -o $@
 endif
 
 .SECONDEXPANSION:
-$(AVRPROJ): %.elf : $$(findstring $$(*:%=%.o),$(OBJ)) $(filter-out $(PROJ:%=%.o),$(OBJ))
+$(AVRPROJ): %.elf : $$(findstring $$(*:%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ)) $(filter-out $(PROJ:%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ))
 	@echo LD $@
 ifneq (,$(CXX_SRC))
-	$(Q)$(CXX) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
+	$(Q)$(CXX) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) -o $@
 else
-	$(Q)$(CC)  $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
+	$(Q)$(CC)  $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) -o $@
 endif
 
 .SECONDEXPANSION:
-$(CM4_PROJ): %.elf : $$(findstring $$(*:%=%.o),$(OBJ)) $(filter-out $(PROJ:%=%.o),$(OBJ))
+$(CM4_PROJ): %.elf : $$(findstring $$(*:%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ)) $(filter-out $(PROJ:%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ))
 	@echo LD $@
 ifneq (,$(CXX_SRC))
-	$(Q)$(CXX) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
+	$(Q)$(CXX) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) -o $@
 else
-	$(Q)$(CC) $(filter %.o %.a %.so, $^) $(LDFLAGS) -o $@
+	$(Q)$(CC) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) -o $@
 endif
 
 # Generate object files; output assembly listings alongside.  esden
 # tells me that it's hard to get a real GCC on OS X, so avoid the
 # worst of the non-portability.
-$(CUSTOM_C_OBJ) : %.o : %.c
+$(CUSTOM_C_OBJ) : %.$(OBJECT_FILE_SUFFIX) : %.c
 	@echo CC \(CUSTOM\) $(notdir $<)
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CC) $(CUSTOM_CFLAGS) -c $< -o $@
 else
-	$(Q)$(CC) $(CUSTOM_CFLAGS) $(ASMFLAGS)$(@:%.o=%.$(ASMNAME)) -c $< -o $@
+	$(Q)$(CC) $(CUSTOM_CFLAGS) $(ASMFLAGS)$(@:%.$(OBJECT_FILE_SUFFIX)=%.$(ASMNAME)) -c $< -o $@
 endif
 
-$(filter-out $(CUSTOM_C_OBJ), $(C_OBJ)) : %.o : %.c # $(C_HDR)
+$(filter-out $(CUSTOM_C_OBJ), $(C_OBJ)) : %.$(OBJECT_FILE_SUFFIX) : %.c # $(C_HDR)
 	@echo CC $(notdir $<)
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 else
-	$(Q)$(CC) $(CFLAGS) $(ASMFLAGS)$(@:%.o=%.$(ASMNAME)) -c $< -o $@
+	$(Q)$(CC) $(CFLAGS) $(ASMFLAGS)$(@:%.$(OBJECT_FILE_SUFFIX)=%.$(ASMNAME)) -c $< -o $@
 endif
 
-$(CUSTOM_CXX_OBJ) : %.o : %.$(CXX_EXT)
+$(CUSTOM_CXX_OBJ) : %.$(OBJECT_FILE_SUFFIX) : %.$(CXX_EXT)
 	@echo CXX \(CUSTOM\) $(notdir $<)
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) -c $< -o $@
 else
-	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) $(ASMFLAGS)$(@:%.o=%.$(ASMNAME)) -c $< -o $@
+	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) $(ASMFLAGS)$(@:%.$(OBJECT_FILE_SUFFIX)=%.$(ASMNAME)) -c $< -o $@
 endif
 
-$(filter-out $(CUSTOM_CXX_OBJ), $(CXX_OBJ)) : %.o : %.$(CXX_EXT) # $(CXX_HDR)
+$(filter-out $(CUSTOM_CXX_OBJ), $(CXX_OBJ)) : %.$(OBJECT_FILE_SUFFIX) : %.$(CXX_EXT) # $(CXX_HDR)
 	@echo CXX $(notdir $<)
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 else
-	$(Q)$(CXX) $(CXXFLAGS) $(ASMFLAGS)$(@:%.o=%.$(ASMNAME)) -c $< -o $@
+	$(Q)$(CXX) $(CXXFLAGS) $(ASMFLAGS)$(@:%.$(OBJECT_FILE_SUFFIX)=%.$(ASMNAME)) -c $< -o $@
 endif
 
 $(OBJ) : $(HDR)

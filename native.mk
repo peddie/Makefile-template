@@ -75,17 +75,17 @@ ARFLAGS ?= rcs
 SHAREDNAME ?= $(LIBNAME:%=%.so)
 STATICNAME ?= $(LIBNAME:%=%.a)
 
-$(SHAREDNAME) : lib%.so : %.o $(filter-out $(LIBNAME:lib%=%.o),$(OBJ))
+$(SHAREDNAME) : lib%.so : %.$(OBJECT_FILE_SUFFIX) $(filter-out $(LIBNAME:lib%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ))
 	@echo LDLIB $@
 ifneq (,$(CXX_SRC))
-	$(Q)$(CXX) $(filter %.o %.a %.so, $+) $(LDLIBFLAGS) -shared -Wl,-soname,$(@) -o $(@)
+	$(Q)$(CXX) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $+) $(LDLIBFLAGS) -shared -Wl,-soname,$(@) -o $(@)
 else
-	$(Q)$(CC) $(filter %.o %.a %.so, $+) $(LDLIBFLAGS) -shared -Wl,-soname,$(@) -o $(@)
+	$(Q)$(CC) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $+) $(LDLIBFLAGS) -shared -Wl,-soname,$(@) -o $(@)
 endif
 
-$(STATICNAME) : lib%.a : %.o $(filter-out $(LIBNAME:lib%=%.o),$(OBJ))
+$(STATICNAME) : lib%.a : %.$(OBJECT_FILE_SUFFIX) $(filter-out $(LIBNAME:lib%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ))
 	@echo AR $@
-	$(Q)$(AR) $(ARFLAGS) $(@) $(filter %.o %.a %.so, $+)
+	$(Q)$(AR) $(ARFLAGS) $(@) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $+)
 
 .PHONY: shared static
 shared: $(SHAREDNAME)

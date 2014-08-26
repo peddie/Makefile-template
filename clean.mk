@@ -2,7 +2,7 @@
 .PHONY: clean
 
 clean:
-	@echo CLEAN $(PROJ) $(OBJ_SHORT:%.o=%) $(TESTS)
+	@echo CLEAN $(PROJ) $(OBJ_SHORT:%.$(OBJECT_FILE_SUFFIX)=%) $(TESTS)
 # Clean up executable
 	$(Q)rm -f $(PROJ)
 # Clean up object files
