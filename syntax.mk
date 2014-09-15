@@ -45,20 +45,20 @@ CC_INCLUDE_DIRS ?= $(COMPILER_INCLUDE_DIRS) $(shell $(CC) -print-file-name=inclu
 CC_INCLUDES ?= $(foreach include,$(CC_INCLUDE_DIRS),-I$(include))
 
 # Google's C++ linter (not too bad for C either)
-GOOGLE_CPPLINT ?= $(shell if [ `which cpplint.py` ]; then echo cpplint.py; elif [ `which cpplint` ]; then echo cpplint; fi;)
+GOOGLE_CPPLINT ?= $(shell if [ `which cpplint.py >/dev/null 2>&1` ]; then echo cpplint.py; elif [ `which cpplint >/dev/null 2>&1` ]; then echo cpplint; fi;)
 
 # cppcheck -- warning, this can be quite slow, so we don't include it
 # by default!
-CPPCHECK ?= $(shell if [ `which cppcheck` ]; then echo cppcheck; fi;)
+CPPCHECK ?= $(shell if [ `which cppcheck >/dev/null 2>&1` ]; then echo cppcheck; fi;)
 CPPCHECK_FLAGS ?= --enable=all --std=c++11 --force
 
 # The venerable splint.  It's infuriating and fragile, so we don't
 # include it by default
-SPLINT ?= $(shell if [ `which splint` ]; then echo splint; fi;)
+SPLINT ?= $(shell if [ `which splint >/dev/null 2>&1` ]; then echo splint; fi;)
 SPLINT_FLAGS ?= +posixlib -warnposix
 
 # sparse
-SPARSE ?= $(shell if [ `which cgcc` ]; then echo cgcc; fi;)
+SPARSE ?= $(shell if [ `which cgcc >/dev/null 2>&1` ]; then echo cgcc; fi;)
 SPARSE_FLAGS ?= -Wsparse-all -Wno-declaration-after-statement -fsyntax-only
 
 # Overload these to specify more built-in tests.
