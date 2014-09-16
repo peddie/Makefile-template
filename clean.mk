@@ -31,7 +31,7 @@ ifdef CM4_PROJ
 	$(Q)rm -f $(CM4_IMAGES) $(CM4_EXT_LISTING)
 endif
 # Clean up dependency files
-	$(Q)find . -name "*.d" | xargs rm -f
+	$(Q)find . -type f -name "*.d" | xargs rm -f
 # Clean up counter files for coverage information
-	$(Q)find . -name "*.gcda" | xargs rm -f
-	$(Q)find . -name "*.gcno" | xargs rm -f
+	$(Q)find . -type f -name "*.gcda" | xargs rm -f
+	$(Q)find . -type f -name "*.gcno" | xargs rm -f
