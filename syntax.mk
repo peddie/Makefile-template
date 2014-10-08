@@ -29,7 +29,7 @@ ifneq (,$(findstring .$(CXX_EXT),$(CXX_CHK_SOURCES)))
 endif
 ifneq (,$(findstring .$(CXX_EXT),$(CXX_TESTS_SRC)))
 	@echo SYNTAX_CHECK $(CXX_TESTS_SRC)
-	$(Q)$(CXX) -fsyntax-only $(WARNFLAGS) $(INCLUDES) $(CXX_TESTS_SRC)
+	$(Q)$(CXX) -fsyntax-only $(CXXWARNFLAGS) $(INCLUDES) $(CXX_TESTS_SRC)
 endif
 
 .PHONY: lint lint-c lint-cc
