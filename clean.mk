@@ -10,6 +10,8 @@ clean:
 # Clean up assembly listings
 	$(Q)rm -f $(ASM)
 	$(Q)rm -f $(PROJ:%=%.map)
+# Clean up dependency files
+	$(Q)rm -f $(DEPS)
 ifdef LIBNAME
 # Clean up shared library
 	$(Q)rm -f $(LIBNAME).so

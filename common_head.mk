@@ -60,6 +60,8 @@ SRC_SHORT = $(notdir $(SRC))
 ASM_SHORT = $(notdir $(ASM))
 OBJ_SHORT = $(notdir $(OBJ))
 
+# So make recognizes dependency files
+SUFFIXES += .d
 
 # Generate sweet mixed assembly/C listing files
 ASMFLAGS ?= -fverbose-asm -Wa,-L,-alchsdn=
