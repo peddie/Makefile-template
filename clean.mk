@@ -9,6 +9,8 @@ clean:
 	$(Q)rm -f $(OBJ)
 # Clean up assembly listings
 	$(Q)rm -f $(ASM)
+# Clean up dependency files
+	$(Q)rm -f $(DEPS)
 ifdef LIBNAME
 # Clean up shared library
 	$(Q)rm -f $(LIBNAME).so
