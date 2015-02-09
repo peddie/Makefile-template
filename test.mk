@@ -24,7 +24,7 @@ ifdef GTEST_DIR
 CXX_TESTS_INCLUDE ?= $(GTEST_DIR)
 endif
 
-C_TESTS_LINK ?= check
+C_TESTS_LINK ?= check pthread
 ifdef GTEST_DIR
 CXX_TESTS_LINK ?= gtest
 endif
