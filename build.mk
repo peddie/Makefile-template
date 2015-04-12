@@ -79,6 +79,9 @@ endif
 # worst of the non-portability.
 $(CUSTOM_C_OBJ) : %.$(OBJECT_FILE_SUFFIX) : %.c
 	@echo CC \(CUSTOM\) $(notdir $<)
+ifdef USE_DEPS
+	$(Q)$(CC) -MM -MT $@ -MT $(basename $(basename $@)).d $(CUSTOM_CFLAGS) $< -MF $(basename $(basename $@)).d
+endif
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CC) $(CUSTOM_CFLAGS) -c $< -o $@
 else
@@ -87,6 +90,9 @@ endif
 
 $(filter-out $(CUSTOM_C_OBJ), $(C_OBJ)) : %.$(OBJECT_FILE_SUFFIX) : %.c # $(C_HDR)
 	@echo CC $(notdir $<)
+ifdef USE_DEPS
+	$(Q)$(CC) -MM -MT $@ -MT $(basename $(basename $@)).d $(CFLAGS) $< -MF $(basename $(basename $@)).d
+endif
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 else
@@ -95,6 +101,9 @@ endif
 
 $(CUSTOM_CXX_OBJ) : %.$(OBJECT_FILE_SUFFIX) : %.$(CXX_EXT)
 	@echo CXX \(CUSTOM\) $(notdir $<)
+ifdef USE_DEPS
+	$(Q)$(CXX) -MM -MT $@ -MT $(basename $(basename $@)).d $(CUSTOM_CXXFLAGS) $< -MF $(basename $(basename $@)).d
+endif
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) -c $< -o $@
 else
@@ -103,10 +112,17 @@ endif
 
 $(filter-out $(CUSTOM_CXX_OBJ), $(CXX_OBJ)) : %.$(OBJECT_FILE_SUFFIX) : %.$(CXX_EXT) # $(CXX_HDR)
 	@echo CXX $(notdir $<)
+ifdef USE_DEPS
+	$(Q)$(CXX) -MM -MT $@ -MT $(basename $(basename $@)).d $(CXXFLAGS) $< -MF $(basename $(basename $@)).d
+endif
 ifeq ("$(UNAME_OS)","Darwin")
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 else
 	$(Q)$(CXX) $(CXXFLAGS) $(ASMFLAGS)$(@:%.$(OBJECT_FILE_SUFFIX)=%.$(ASMNAME)) -c $< -o $@
 endif
 
+ifdef USE_DEPS
+-include $(DEPS)
+else
 $(OBJ) : $(HDR)
+endif
