@@ -23,7 +23,21 @@ AR ?= ar
 ifdef PORTABLE_BINARIES
 OPTFLAGS ?= -Os
 else
+ifndef CLANGIN
+# I can't figure out any way to tell 'clang' to use anything other
+# than /usr/bin/ld, which in the likely case that it's not secretly
+# 'gold' doesn't correctly handle the llvm gold plugin, so LTO is
+# broken.
+OPTFLAGS ?= -Os -march=native -ftree-vectorize
+else
 OPTFLAGS ?= -Os -march=native -ftree-vectorize -flto
+endif
+endif
+
+ifdef CLANGIN
+DBGSWITCHES ?=
+else
+DBGSWITCHES ?= -frecord-gcc-switches -grecord-gcc-switches
 endif
 
 # Include debug symbols; trap on signed integer overflows; install
@@ -33,7 +47,7 @@ endif
 # 
 # TODO: mixing in mudflaps or profiling should really just be another
 # target.
-DBGFLAGS ?= -g3 -ftrapv -frecord-gcc-switches # -fmudflap -pg
+DBGFLAGS ?= -g3 -ftrapv $(DBGSWITCHES) # -pg
 
 # Build position-independent executables; fortify with array checks;
 # protect stack against smashing (intentional or accidental)
@@ -56,8 +70,8 @@ endif
 LDOUTPUTFLAGS ?= -Wl,--cref -Wl,-Map=
 
 LDWARNFLAGS ?=
-# Include debug symbols; use the mudflaps library for runtime checks
-LDDBGFLAGS ?= -g3 -frecord-gcc-switches # -lmudflap
+# Include debug symbols
+LDDBGFLAGS ?= -g3 $(DBGSWITCHES) 
 
 # Link as a position-independent executable; mark ELF sections
 # read-only where applicable; resolve all dynamic symbols at initial

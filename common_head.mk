@@ -47,6 +47,12 @@ ASM ?= $(C_ASM) $(CXX_ASM)
 OBJ ?= $(C_OBJ) $(CXX_OBJ)
 DEPS ?= $(C_DEPS) $(CXX_DEPS)
 
+ifeq ("$(UNAME_OS)","Darwin")
+CLANGIN = 22
+endif
+ifneq (,$(findstring clang,$(CC)))
+CLANGIN = 222
+endif
 
 # Here we remove all paths from the given object and source file
 # names; you can echo these in commands and get slightly tidier output.

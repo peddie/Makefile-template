@@ -8,13 +8,14 @@ DEFAULT_WARNFLAGS ?= -Wall -Wextra -std=gnu99 -Wimplicit \
 
 # And for C++:
 # http://stackoverflow.com/questions/399850/best-compiler-warning-level-for-c-c-compilers
+ifdef CLANGIN
 DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 \
     -Wextra  -Waggregate-return -Wcast-align \
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion \
     -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 \
     -Wformat-nonliteral -Wformat-security -Wformat-y2k \
     -Wimport  -Winit-self  -Winline -Winvalid-pch   \
-    -Wunsafe-loop-optimizations  -Wlong-long -Wmissing-braces \
+    -Wlong-long -Wmissing-braces \
     -Wmissing-field-initializers -Wmissing-format-attribute   \
     -Wmissing-include-dirs -Wmissing-noreturn \
     -Wpacked  -Wpadded -Wparentheses  -Wpointer-arith \
@@ -26,14 +27,35 @@ DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 \
     -Wunused-function  -Wunused-label  -Wunused-parameter \
     -Wunused-value  -Wunused-variable  -Wvariadic-macros \
     -Wvolatile-register-var  -Wwrite-strings
+else
+DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 \
+    -Wextra  -Waggregate-return -Wcast-align \
+    -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion \
+    -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 \
+    -Wformat-nonliteral -Wformat-security -Wformat-y2k \
+    -Wimport  -Winit-self  -Winline -Winvalid-pch   \
+    -Wunsafe-loop-optimizations -Wlong-long -Wmissing-braces \
+    -Wmissing-field-initializers -Wmissing-format-attribute   \
+    -Wmissing-include-dirs -Wmissing-noreturn \
+    -Wpacked  -Wpadded -Wparentheses  -Wpointer-arith \
+    -Wredundant-decls -Wreturn-type \
+    -Wsequence-point  -Wshadow -Wsign-compare  -Wstack-protector \
+    -Wstrict-aliasing -Wstrict-aliasing=2 -Wswitch  -Wswitch-default \
+    -Wswitch-enum -Wtrigraphs  -Wuninitialized \
+    -Wunknown-pragmas  -Wunreachable-code -Wunused \
+    -Wunused-function  -Wunused-label  -Wunused-parameter \
+    -Wunused-value  -Wunused-variable  -Wvariadic-macros \
+    -Wvolatile-register-var  -Wwrite-strings
+endif
 
 ifndef NO_WERROR
-WARNFLAGS = $(DEFAULT_WARNFLAGS) -Werror
-CXXWARNFLAGS = $(DEFAULT_CXXWARNFLAGS) -Werror
+WARNFLAGS ?= $(DEFAULT_WARNFLAGS) -Werror
+CXXWARNFLAGS ?= $(DEFAULT_CXXWARNFLAGS) -Werror
 else
-WARNFLAGS = $(DEFAULT_WARNFLAGS)
-CXXWARNFLAGS = $(DEFAULT_CXXWARNFLAGS)
+WARNFLAGS ?= $(DEFAULT_WARNFLAGS)
+CXXWARNFLAGS ?= $(DEFAULT_CXXWARNFLAGS)
 endif
+
 
 INCLUDES = $(INCLUDENAMES:%=-I%) $(OTHERINCLUDE)
 LIBS = $(LIBNAMES:%=-l%) $(LIBDIRS:%=-L%) $(OTHERLIB)
@@ -79,7 +101,7 @@ endif
 # worst of the non-portability.
 $(CUSTOM_C_OBJ) : %.$(OBJECT_FILE_SUFFIX) : %.c
 	@echo CC \(CUSTOM\) $(notdir $<)
-ifeq ("$(UNAME_OS)","Darwin")
+ifdef CLANGIN
 	$(Q)$(CC) $(CUSTOM_CFLAGS) -c $< -o $@
 else
 	$(Q)$(CC) $(CUSTOM_CFLAGS) $(ASMFLAGS)$(@:%.$(OBJECT_FILE_SUFFIX)=%.$(ASMNAME)) -c $< -o $@
@@ -87,7 +109,7 @@ endif
 
 $(filter-out $(CUSTOM_C_OBJ), $(C_OBJ)) : %.$(OBJECT_FILE_SUFFIX) : %.c # $(C_HDR)
 	@echo CC $(notdir $<)
-ifeq ("$(UNAME_OS)","Darwin")
+ifdef CLANGIN
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 else
 	$(Q)$(CC) $(CFLAGS) $(ASMFLAGS)$(@:%.$(OBJECT_FILE_SUFFIX)=%.$(ASMNAME)) -c $< -o $@
@@ -95,7 +117,7 @@ endif
 
 $(CUSTOM_CXX_OBJ) : %.$(OBJECT_FILE_SUFFIX) : %.$(CXX_EXT)
 	@echo CXX \(CUSTOM\) $(notdir $<)
-ifeq ("$(UNAME_OS)","Darwin")
+ifdef CLANGIN
 	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) -c $< -o $@
 else
 	$(Q)$(CXX) $(CUSTOM_CXXFLAGS) $(ASMFLAGS)$(@:%.$(OBJECT_FILE_SUFFIX)=%.$(ASMNAME)) -c $< -o $@
@@ -103,7 +125,7 @@ endif
 
 $(filter-out $(CUSTOM_CXX_OBJ), $(CXX_OBJ)) : %.$(OBJECT_FILE_SUFFIX) : %.$(CXX_EXT) # $(CXX_HDR)
 	@echo CXX $(notdir $<)
-ifeq ("$(UNAME_OS)","Darwin")
+ifdef CLANGIN
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 else
 	$(Q)$(CXX) $(CXXFLAGS) $(ASMFLAGS)$(@:%.$(OBJECT_FILE_SUFFIX)=%.$(ASMNAME)) -c $< -o $@
