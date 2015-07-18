@@ -53,6 +53,8 @@ else
 LDOPTFLAGS ?= $(OPTFLAGS) -Wl,--gc-sections
 endif
 
+LDOUTPUTFLAGS ?= -Wl,--cref -Wl,-Map=
+
 LDWARNFLAGS ?=
 # Include debug symbols; use the mudflaps library for runtime checks
 LDDBGFLAGS ?= -g3 -frecord-gcc-switches # -lmudflap

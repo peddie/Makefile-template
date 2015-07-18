@@ -51,9 +51,9 @@ all: $(PROJ)
 $(PROJ): % : $$(findstring $$(*:%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ)) $(filter-out $(PROJ:%=%.$(OBJECT_FILE_SUFFIX)),$(OBJ))
 	@echo LD $@
 ifneq (,$(CXX_SRC))
-	$(Q)$(CXX) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) -o $@
+	$(Q)$(CXX) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) $(LDOUTPUTFLAGS)$(@).map -o $@
 else
-	$(Q)$(CC) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) -o $@
+	$(Q)$(CC) $(filter %.$(OBJECT_FILE_SUFFIX) %.a %.so, $^) $(LDFLAGS) $(LDOUTPUTFLAGS)$(@).map -o $@
 endif
 
 .SECONDEXPANSION:

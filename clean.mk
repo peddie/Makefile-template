@@ -9,6 +9,7 @@ clean:
 	$(Q)rm -f $(OBJ)
 # Clean up assembly listings
 	$(Q)rm -f $(ASM)
+	$(Q)rm -f $(PROJ:%=%.map)
 ifdef LIBNAME
 # Clean up shared library
 	$(Q)rm -f $(LIBNAME).so
