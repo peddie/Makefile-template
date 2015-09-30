@@ -10,7 +10,7 @@ DEFAULT_WARNFLAGS ?= -Wall -Wextra -std=gnu99 -Wimplicit \
 # http://stackoverflow.com/questions/399850/best-compiler-warning-level-for-c-c-compilers
 ifdef CLANGIN
 DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 \
-    -Wextra  -Waggregate-return -Wcast-align -Wsign-conversion \
+    -Wextra  -Waggregate-return -Wcast-align \
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion \
     -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 \
     -Wformat-nonliteral -Wformat-security -Wformat-y2k \
@@ -29,7 +29,7 @@ DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 \
     -Wvolatile-register-var  -Wwrite-strings
 else
 DEFAULT_CXXWARNFLAGS ?= -Wall -Weffc++ -std=gnu++11 \
-    -Wextra  -Waggregate-return -Wcast-align -Wsign-conversion \
+    -Wextra  -Waggregate-return -Wcast-align \
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion \
     -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 \
     -Wformat-nonliteral -Wformat-security -Wformat-y2k \
