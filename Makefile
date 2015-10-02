@@ -44,9 +44,6 @@ TESTS_SRC ?=
 # lots of people use .cpp instead.
 CXX_EXT = cc
 
-# Use dependencies?
-USE_DEPS ?= y
-
 MKFILE_DIR ?= /home/peddie/programming/Makefile/
 
 include $(MKFILE_DIR)common_head.mk
