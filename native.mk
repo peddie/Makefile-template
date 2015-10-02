@@ -67,8 +67,6 @@ else
 LDOPTFLAGS ?= $(OPTFLAGS) -Wl,--gc-sections
 endif
 
-LDOUTPUTFLAGS ?= -Wl,--cref -Wl,-Map=
-
 LDWARNFLAGS ?=
 # Include debug symbols
 LDDBGFLAGS ?= -g3 $(DBGSWITCHES) 

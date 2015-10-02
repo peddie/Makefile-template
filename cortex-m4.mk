@@ -24,7 +24,7 @@ CM4_CXXFLAGS ?= -fno-exceptions
 
 CM4_LDFLAGS ?= --static -lc -lnosys -nostartfiles -T$(LDSCRIPT)
 
-LDOPTFLAGS ?= -Wl,--gc-sections -Wl,-Map=$(PROJ).map,--cref
+LDOPTFLAGS ?= -Wl,--gc-sections
 
 USERFLAGS += $(CM4_BOTHFLAGS) $(HARD_FLOAT_FLAGS)
 USERCFLAGS += $(CM4_CFLAGS)
