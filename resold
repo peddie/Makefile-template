@@ -1,0 +1,110 @@
+name:                pipes-zeromq4
+version:             0.3.0.0
+synopsis:            Pipes integration for ZeroMQ messaging
+homepage:            https://github.com/peddie/pipes-zeromq4
+bug-reports:         https://github.com/peddie/pipes-zeromq4/issues
+license:             BSD3
+license-file:        LICENSE
+author:              Matthew Peddie <mpeddie@gmail.com>
+maintainer:          Matthew Peddie <mpeddie@gmail.com>
+copyright:           (c) 2015 Matthew Peddie
+category:            Network, Control, Pipes
+build-type:          Simple
+cabal-version:       >=1.10
+description: {
+
+<https://hackage.haskell.org/package/pipes Pipes> integration for
+<http://zeromq.org/ ZeroMQ> using the
+<https://hackage.haskell.org/package/zeromq4-haskell zeromq4-haskell bindings>.
+.
+This package is very basic.  I am new to the @Pipes@ family of APIs
+and would be overjoyed to receive feedback.
+
+}
+tested-with: GHC == 7.8.4, GHC == 7.10.3, GHC == 8.0.2, GHC == 8.1.*
+
+library
+  exposed-modules:     Pipes.ZMQ4
+  build-depends:       base >=4.6 && <5
+                     , zeromq4-haskell >=0.6 && <0.7
+                     , bytestring >=0.10 && <0.11
+                     , semigroups >=0.16 && <0.19
+                     , pipes >=4.1 && <4.4
+                     , pipes-safe >=2.2 && <2.3
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+
+source-repository head
+  type:           git
+  location:       git://github.com/peddie/pipes-zeromq4
+
+flag examples
+    description:    Build usage examples
+    default:        False
+
+executable proxy
+  if flag(examples)
+    Buildable: True
+  else
+    Buildable: False
+  hs-source-dirs:      examples
+  main-is:             proxy.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.5 && < 5
+                     , pipes-zeromq4
+                     , pipes >=4.1 && <4.2
+                     , pipes-safe >=2.2 && <2.3
+                     , zeromq4-haskell >=0.6 && <0.7
+                     , bytestring >= 0.10 && < 0.11
+  ghc-options:         -O2 -rtsopts -threaded
+
+executable client
+  if flag(examples)
+    Buildable: True
+  else
+    Buildable: False
+  hs-source-dirs:      examples
+  main-is:             client.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.5 && < 5
+                     , pipes-zeromq4
+                     , pipes >=4.1 && <4.2
+                     , pipes-safe >=2.2 && <2.3
+                     , zeromq4-haskell >=0.6 && <0.7
+                     , bytestring >= 0.10 && < 0.11
+                     , semigroups >=0.16 && <0.19
+  ghc-options:         -O2 -rtsopts -threaded
+
+executable server
+  if flag(examples)
+    Buildable: True
+  else
+    Buildable: False
+  hs-source-dirs:      examples
+  main-is:             server.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.5 && < 5
+                     , pipes-zeromq4
+                     , pipes >=4.1 && <4.2
+                     , pipes-safe >=2.2 && <2.3
+                     , zeromq4-haskell >=0.6 && <0.7
+                     , bytestring >= 0.10 && < 0.11
+                     , semigroups >=0.16 && <0.19
+  ghc-options:         -O2 -rtsopts -threaded
+
+executable serverPipeline
+  if flag(examples)
+    Buildable: True
+  else
+    Buildable: False
+  hs-source-dirs:      examples
+  main-is:             serverPipeline.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.5 && < 5
+                     , pipes-zeromq4
+                     , pipes >=4.1 && <4.2
+                     , pipes-safe >=2.2 && <2.3
+                     , zeromq4-haskell >=0.6 && <0.7
+                     , bytestring >= 0.10 && < 0.11
+                     , semigroups >=0.16 && <0.19
+  ghc-options:         -O2 -rtsopts -threaded
